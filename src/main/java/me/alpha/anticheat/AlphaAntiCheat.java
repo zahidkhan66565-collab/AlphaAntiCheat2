@@ -1,4 +1,4 @@
-package me.alpha.anticheat;
+package me.alpha;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,20 +13,15 @@ public class AlphaAntiCheat extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(this, this);
-        getLogger().info("AlphaAntiCheat PRO Enabled");
+        getLogger().info("AlphaAntiCheat PRO v2 Enabled!");
     }
 
-    private void alert(String hack, Player p) {
-        String msg = "§c[AlphaAC] §f" + hack + " detected -> §e" + p.getName();
-        Bukkit.getConsoleSender().sendMessage(msg);
-
-        for (Player op : Bukkit.getOnlinePlayers()) {
-            if (op.isOp()) {
-                op.sendMessage(msg);
-            }
-        }
+    @Override
+    public void onDisable() {
+        getLogger().info("AlphaAntiCheat Disabled!");
     }
 
+    // Speed / Fly Check
     @EventHandler
     public void onMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
@@ -40,15 +35,33 @@ public class AlphaAntiCheat extends JavaPlugin implements Listener {
         }
     }
 
+    // KillAura / Reach basic check
     @EventHandler
     public void onHit(EntityDamageByEntityEvent e) {
+
         if (!(e.getDamager() instanceof Player)) return;
 
-        Player p = (Player) e.getDamager();
+        Player attacker = (Player) e.getDamager();
 
-        if (p.getAttackCooldown() < 0.2) {
-            alert("AutoClicker/KillAura", p);
-            e.setCancelled(true);
+        double distance =
+                attacker.getLocation().distance(e.getEntity().getLocation());
+
+        if (distance > 3.3) {
+            alert("Reach", attacker);
+        }
+    }
+
+    private void alert(String hack, Player player) {
+
+        String msg = "§c[AlphaAC] §e" + player.getName()
+                + " suspected of §c" + hack;
+
+        Bukkit.getConsoleSender().sendMessage(msg);
+
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            if (online.isOp()) {
+                online.sendMessage(msg);
+            }
         }
     }
 }
