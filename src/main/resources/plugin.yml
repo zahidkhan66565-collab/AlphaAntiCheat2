@@ -1,0 +1,10 @@
+name: AlphaAntiCheat
+version: 1.0
+main: me.alpha.AlphaAntiCheat
+api-version: '1.21'
+author: Alpha
+description: Alpha AntiCheat for PvP servers
+
+commands:
+  alerts:
+    description: Toggle anticheat alerts
