@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Setup Java 21
@@ -21,3 +21,10 @@ jobs:
 
       - name: Build Plugin
         run: mvn clean package
+
+      # ⭐ THIS PART WAS MISSING
+      - name: Upload Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlphaAntiCheat
+          path: target/*.jar
